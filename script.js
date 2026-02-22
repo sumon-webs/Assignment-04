@@ -21,6 +21,13 @@ const deletes = document.getElementById("delete")
 
 const availableStatus = document.getElementById("available-section")
 
+const currentStatus = 'all'
+
+let interviewList = []
+let rejectList = []
+
+
+
 
 function count() {
     totalCount.innerText = mainContainer.children.length
@@ -97,3 +104,58 @@ mainContainer.addEventListener("click", function (id) {
 
     }
 })
+
+
+function renderInterview() {
+    filterSection.innerHTML = ''
+
+    for (const event of interviewList) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-green-400">
+            <div class=" flex justify-between">
+                <div>
+                    <h3 class="company-name text-2xl">${event.companyName}</h3>
+                    <p class="job-name">${event.jobName}</p>
+                </div>
+                <div class="btn"><i class="fa-solid fa-trash-can"></i></div>
+            </div>
+            <p class="salary">${event.salary}</p>
+            <p class=" apply bg-base-300 px-2 py-1 inline-block">${event.status}</p>
+            <p class="about">${event.about}</p>
+            <div>
+                <button id="interview-btn" class="btn btn-outline btn-success">INTERVIEW</button>
+                <button id="rejected-btn" class="btn btn-outline btn-error">REJECTED</button>
+            </div>
+        </div>
+        `
+        filterSection.appendChild(div)
+    }
+}
+
+function renderReject() {
+    filterSection.innerHTML = ''
+
+    for (const event of rejectList) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-red-400">
+            <div class=" flex justify-between">
+                <div>
+                    <h3 class="company-name text-2xl">${event.companyName}</h3>
+                    <p class="job-name">${event.jobName}</p>
+                </div>
+                <div class="btn"><i class="delete fa-solid fa-trash-can"></i></div>
+            </div>
+            <p class="salary">${event.salary}</p>
+            <p class=" apply bg-base-300 px-2 py-1 inline-block">${event.status}</p>
+            <p class="about">${event.about}</p>
+            <div>
+                <button id="interview-btn" class="btn btn-outline btn-success">INTERVIEW</button>
+                <button id="rejected-btn" class="btn btn-outline btn-error">REJECTED</button>
+            </div>
+        </div>
+        `
+        filterSection.appendChild(div)
+    }
+}
