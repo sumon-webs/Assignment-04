@@ -38,10 +38,10 @@
             <p><span id="total-job">0</span> Job</p>
         </div>
         <div>
-            <button onclick="clickBtn('btn-all')" id="btn-all" class=" btn btn-primary">All</button>
-            <button onclick="clickBtn('btn-interview')" id="btn-interview"
+            <button onclick="clickBtn('btn-all')"  id="btn-all" class=" btn btn-primary">All</button>
+            <button onclick="clickBtn('btn-interview',available('btn-interview'))" id="btn-interview"
                 class=" btn">Interview</button>
-            <button onclick="clickBtn('btn-rejected')" id="btn-rejected"
+            <button onclick="clickBtn('btn-rejected'),available('btn-rejected')" id="btn-rejected"
                 class=" btn">Rejected</button>
         </div>
     </section>

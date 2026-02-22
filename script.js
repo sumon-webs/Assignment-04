@@ -71,7 +71,7 @@ function clickBtn(id) {
     document.getElementById(id).classList.add("btn-primary")
 
     if (id === "btn-interview") {
-        currentStatus = id
+        // currentStatus = id
 
         mainContainer.classList.add("hidden")
         filterSection.classList.remove("hidden")
@@ -82,12 +82,11 @@ function clickBtn(id) {
     }
     else if (id === "btn-all") {
         mainContainer.classList.remove("hidden")
+        availableStatus.classList.add("hidden")
         filterSection.classList.add("hidden")
         count()
     }
-    if (id === "btn-rejected") {
-        currentStatus = id
-
+    else if (id === "btn-rejected") {
         mainContainer.classList.add("hidden")
         filterSection.classList.remove("hidden")
         jobCount.innerText = 'Rejected job'
@@ -105,8 +104,20 @@ let cardContainer = document.getElementById("card-container")
 mainContainer.addEventListener("click", function (id) {
 
     if (id.target.classList.contains("delete")) {
-        id.target.parentElement.parentElement.parentElement.remove()
+
+        const parent = id.target.parentElement.parentElement.parentElement
+        const jobName = parent.querySelector(".job-name").innerText
+
+        parent.remove()
+
+        interviewList = interviewList.filter(item => item.jobName !== jobName)
+        rejectList = rejectList.filter(item => item.jobName !== jobName)
+
+        renderInterview()
+        renderReject()
         count()
+        updateJobCount()
+        updateAvailableStatus()
     }
     if (id.target.classList.contains("btn-success")) {
         const parent = id.target.parentNode.parentNode;
@@ -192,7 +203,7 @@ function renderInterview() {
                     <h3 class="company-name text-2xl">${event.companyName}</h3>
                     <p class="job-name">${event.jobName}</p>
                 </div>
-                <div class="btn"><i class="fa-solid fa-trash-can"></i></div>
+                <div class="btn"><i class="delete fa-solid fa-trash-can"></i></div>
             </div>
             <div class=" flex gap-x-3">
                 <p class="location">${event.location}</p>
@@ -218,13 +229,13 @@ function renderReject() {
         const div = document.createElement("div");
 
         div.innerHTML = `
-        <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-green-400">
+        <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-red-400">
             <div class=" flex justify-between">
                 <div>
                     <h3 class="company-name text-2xl">${event.companyName}</h3>
                     <p class="job-name">${event.jobName}</p>
                 </div>
-                <div class="btn"><i class="fa-solid fa-trash-can"></i></div>
+                <div class="btn"><i class="delete fa-solid fa-trash-can"></i></div>
             </div>
             <div class=" flex gap-x-3">
                 <p class="location">${event.location}</p>
@@ -246,6 +257,7 @@ function renderReject() {
 
 
 filterSection.addEventListener("click", function (id) {
+
     if (id.target.classList.contains("btn-success")) {
         const parent = id.target.parentNode.parentNode;
 
@@ -256,7 +268,7 @@ filterSection.addEventListener("click", function (id) {
         const about = parent.querySelector(".about").innerText
 
         parent.querySelector(".apply").innerText = "Interview"
-        
+
         const allCards = mainContainer.children;
         for (let card of allCards) {
             const name = card.querySelector(".job-name").innerText;
