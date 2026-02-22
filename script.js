@@ -135,6 +135,12 @@ mainContainer.addEventListener("click", function (id) {
             about
         }
 
+        let statusColor = parent.querySelector(".apply");
+
+        statusColor.classList.add("bg-green-200")
+        statusColor.classList.remove("bg-red-200")
+
+
         const exist = interviewList.find(item => item.companyName === jobInfo.companyName)
         if (!exist) {
             interviewList.push(jobInfo)
@@ -144,6 +150,8 @@ mainContainer.addEventListener("click", function (id) {
 
 
         count()
+
+        id.target.parentNode.parentNode.classList.remove("border-l-4", "border-red-400")
 
         id.target.parentNode.parentNode.classList.add("border-l-4", "border-green-400")
 
@@ -166,6 +174,10 @@ mainContainer.addEventListener("click", function (id) {
             about
         }
 
+        let statusColor = parent.querySelector(".apply");
+
+        statusColor.classList.add("bg-red-200")
+
         const exist = rejectList.find(item => item.companyName === jobInfo.companyName)
         if (!exist) {
             rejectList.push(jobInfo)
@@ -174,7 +186,7 @@ mainContainer.addEventListener("click", function (id) {
         interviewList = interviewList.filter(item => item.jobName != jobInfo.jobName)
 
         count()
-        
+
         id.target.parentNode.parentNode.classList.add("border-l-4", "border-red-400")
     }
 })
@@ -185,6 +197,12 @@ function renderInterview() {
 
     for (const event of interviewList) {
         const div = document.createElement("div");
+
+        statusColor = "bg-green-200"
+
+        if (event.status === "Interview") statusColor = "bg-green-200"
+        else if (event.status === "Rejected") statusColor = "bg-red-200"
+
         div.innerHTML = `
         <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-green-400">
             <div class=" flex justify-between">
@@ -195,7 +213,7 @@ function renderInterview() {
                 <div class="btn"><i class="fa-solid fa-trash-can"></i></div>
             </div>
             <p class="salary">${event.salary}</p>
-            <p class=" apply bg-base-300 px-2 py-1 inline-block">${event.status}</p>
+            <p class=" apply bg-base-300 px-2 ${statusColor} py-1 inline-block">${event.status}</p>
             <p class="about">${event.about}</p>
             <div>
                 <button id="interview-btn" class="btn btn-outline btn-success">INTERVIEW</button>
@@ -212,6 +230,10 @@ function renderReject() {
 
     for (const event of rejectList) {
         const div = document.createElement("div");
+        statusColor = "bg-green-200"
+
+        if (event.status === "Interview") statusColor = "bg-green-200"
+        else if (event.status === "Rejected") statusColor = "bg-red-200"
         div.innerHTML = `
         <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-red-400">
             <div class=" flex justify-between">
@@ -222,7 +244,7 @@ function renderReject() {
                 <div class="btn"><i class="delete fa-solid fa-trash-can"></i></div>
             </div>
             <p class="salary">${event.salary}</p>
-            <p class=" apply bg-base-300 px-2 py-1 inline-block">${event.status}</p>
+            <p class=" apply bg-base-300 px-2 py-1 ${statusColor} inline-block">${event.status}</p>
             <p class="about">${event.about}</p>
             <div>
                 <button id="interview-btn" class="btn btn-outline btn-success">INTERVIEW</button>
@@ -316,8 +338,8 @@ function available() {
     let availableElement = document.createElement('div')
 
     availableElement.innerHTML = `
-    <div id="available-status" class="max-w-[1440px] mx-auto pt-5 space-y-5 text-center bg-base-200 pt-18
-     pb-18 rounded-sm mt-4">
+    <div id="available-status" class="max-w-[1440px] mx-auto space-y-2 sm:space-y-5 text-center bg-base-200 sm:pt-18
+     sm:pb-18 py-6 rounded-sm mt-4">
         <img class=" mx-auto" src="./jobs.png" alt="">
         <h3>No jobs available</h3>
         <p>Check back soon for new job opportunities</p>
