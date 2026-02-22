@@ -219,3 +219,67 @@ filterSection.addEventListener("click", function (id) {
 
     }
 })
+
+
+function available() {
+    availableStatus.innerHTML = ''
+
+    let availableElement = document.createElement('div')
+
+    availableElement.innerHTML = `
+    <div id="available-status" class="max-w-[1440px] mx-auto pt-5 space-y-5 text-center bg-base-200 pt-18
+     pb-18 rounded-sm mt-4">
+        <img class=" mx-auto" src="./jobs.png" alt="">
+        <h3>No jobs available</h3>
+        <p>Check back soon for new job opportunities</p>
+    </div>
+    `
+
+    availableStatus.appendChild(availableElement)
+}
+
+console.log(availableStatus);
+
+function clickBtn(id) {
+    btnAll.classList.remove("btn-primary")
+    btnInterview.classList.remove("btn-primary")
+    btnRejected.classList.remove("btn-primary")
+
+    document.getElementById(id).classList.add("btn-primary")
+
+    if (id === "btn-interview") {
+        mainContainer.classList.add("hidden")
+        filterSection.classList.remove("hidden")
+        jobCount.innerText = 'Interview job'
+        if(interviewCount.innerText === '0') {
+            available()
+        }
+        else{
+            availableStatus.classList.add('hidden')
+        }
+        // totalJob.innerText = interviewList.length
+        count()
+        totalJob.innerText = `${interviewList.length} of ${totalCount.innerText = mainContainer.children.length}`
+        renderInterview()
+        available()
+    }
+    else if (id === "btn-all") {
+        mainContainer.classList.remove("hidden")
+        filterSection.classList.add("hidden")
+        count()
+    }
+    else if (id === "btn-rejected") {
+        mainContainer.classList.add("hidden")
+        filterSection.classList.remove("hidden")
+        if (rejectedCount.innerText === "0") {
+            available()
+        } else {
+            availableStatus.classList.add('hidden')
+        }
+        available()
+        // count()
+        totalJob.innerText = `${rejectList.length} of ${totalCount.innerText = mainContainer.children.length}`
+        renderReject()
+    }
+    // currentStatus = id
+}
