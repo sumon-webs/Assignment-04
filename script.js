@@ -21,7 +21,7 @@ const deletes = document.getElementById("delete")
 
 const availableStatus = document.getElementById("available-section")
 
-const currentStatus = 'all'
+let currentStatus = 'all'
 
 let interviewList = []
 let rejectList = []
@@ -36,6 +36,54 @@ function count() {
     rejectedCount.innerText = rejectList.length
 }
 count()
+
+function updateJobCount() {
+    if (currentStatus === "btn-all") {
+        totalJob.innerText = mainContainer.children.length
+    }
+    else if (currentStatus === "btn-interview") {
+        totalJob.innerText = interviewList.length + " of " + mainContainer.children.length 
+    }
+    else if (currentStatus === "btn-rejected") {
+        totalJob.innerText = rejectList.length + " of " + mainContainer.children.length
+    }
+}
+
+function clickBtn(id) {
+    currentStatus = id
+
+
+    btnAll.classList.remove("btn-primary")
+    btnInterview.classList.remove("btn-primary")
+    btnRejected.classList.remove("btn-primary")
+
+    document.getElementById(id).classList.add("btn-primary")
+
+    if (id === "btn-interview") {
+        mainContainer.classList.add("hidden")
+        filterSection.classList.remove("hidden")
+        jobCount.innerText = 'Interview job'
+
+        // totalJob.innerText = interviewList.length
+        totalJob.innerText = `${interviewList.length} of ${totalCount.innerText = mainContainer.children.length}`
+        renderInterview()
+        // available()
+    }
+    else if (id === "btn-all") {
+        mainContainer.classList.remove("hidden")
+        filterSection.classList.add("hidden")
+        count()
+    }
+    else if (id === "btn-rejected") {
+        mainContainer.classList.add("hidden")
+        filterSection.classList.remove("hidden")
+
+        totalJob.innerText = `${rejectList.length} of ${totalCount.innerText = mainContainer.children.length}`
+        renderReject()
+    }
+    updateJobCount()
+
+}
 
 
 
@@ -54,13 +102,13 @@ mainContainer.addEventListener("click", function (id) {
         const status = parent.querySelector(".apply").innerText
         const about = parent.querySelector(".about").innerText
 
-        parent.querySelector(".apply").innerText = "Apply"
+        parent.querySelector(".apply").innerText = "Interview"
 
         const jobInfo = {
             companyName,
             jobName,
             salary,
-            status: "Apply   ",
+            status: "Interview",
             about
         }
 
@@ -171,13 +219,13 @@ filterSection.addEventListener("click", function (id) {
         const status = parent.querySelector(".apply").innerText
         const about = parent.querySelector(".about").innerText
 
-        parent.querySelector(".apply").innerText = "Apply"
+        parent.querySelector(".apply").innerText = "Interview"
 
         const jobInfo = {
             companyName,
             jobName,
             salary,
-            status: "Apply   ",
+            status: "Interview",
             about
         }
 
@@ -189,6 +237,12 @@ filterSection.addEventListener("click", function (id) {
         rejectList = rejectList.filter(item => item.jobName != jobInfo.jobName)
 
         count()
+        updateJobCount()
+
+        if (currentStatus === "btn-rejected") {
+            renderReject()
+        }
+
 
     } else if (id.target.classList.contains("btn-error")) {
         const parent = id.target.parentNode.parentNode;
@@ -215,7 +269,13 @@ filterSection.addEventListener("click", function (id) {
         }
 
         interviewList = interviewList.filter(item => item.jobName != jobInfo.jobName)
+
         count()
+        updateJobCount()
+
+        if (currentStatus === "btn-interview") {
+            renderInterview()
+        }
 
     }
 })
@@ -240,46 +300,3 @@ function available() {
 
 console.log(availableStatus);
 
-function clickBtn(id) {
-    btnAll.classList.remove("btn-primary")
-    btnInterview.classList.remove("btn-primary")
-    btnRejected.classList.remove("btn-primary")
-
-    document.getElementById(id).classList.add("btn-primary")
-
-    if (id === "btn-interview") {
-        mainContainer.classList.add("hidden")
-        filterSection.classList.remove("hidden")
-        jobCount.innerText = 'Interview job'
-        if(interviewCount.innerText === '0') {
-            available()
-        }
-        else{
-            availableStatus.classList.add('hidden')
-        }
-        // totalJob.innerText = interviewList.length
-        count()
-        totalJob.innerText = `${interviewList.length} of ${totalCount.innerText = mainContainer.children.length}`
-        renderInterview()
-        available()
-    }
-    else if (id === "btn-all") {
-        mainContainer.classList.remove("hidden")
-        filterSection.classList.add("hidden")
-        count()
-    }
-    else if (id === "btn-rejected") {
-        mainContainer.classList.add("hidden")
-        filterSection.classList.remove("hidden")
-        if (rejectedCount.innerText === "0") {
-            available()
-        } else {
-            availableStatus.classList.add('hidden')
-        }
-        available()
-        // count()
-        totalJob.innerText = `${rejectList.length} of ${totalCount.innerText = mainContainer.children.length}`
-        renderReject()
-    }
-    // currentStatus = id
-}
