@@ -20,3 +20,12 @@ const jobCount = document.getElementById("available-job")
 const deletes = document.getElementById("delete")
 
 const availableStatus = document.getElementById("available-section")
+
+
+function count() {
+    totalCount.innerText = mainContainer.children.length
+    totalJob.innerText = mainContainer.children.length
+    interviewCount.innerText = interviewList.length;
+    rejectedCount.innerText = rejectList.length
+}
+count()
