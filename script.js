@@ -26,7 +26,16 @@ let currentStatus = 'all'
 let interviewList = []
 let rejectList = []
 
-
+function updateAvailableStatus() {
+    if (
+        (currentStatus === "btn-interview" && interviewList.length === 0) ||
+        (currentStatus === "btn-rejected" && rejectList.length === 0)
+    ) {
+        availableStatus.classList.remove("hidden")
+    } else {
+        availableStatus.classList.add("hidden")
+    }
+}
 
 
 function count() {
@@ -42,11 +51,16 @@ function updateJobCount() {
         totalJob.innerText = mainContainer.children.length
     }
     else if (currentStatus === "btn-interview") {
-        totalJob.innerText = interviewList.length + " of " + mainContainer.children.length 
+        totalJob.innerText = interviewList.length + " of " + mainContainer.children.length
+
     }
     else if (currentStatus === "btn-rejected") {
         totalJob.innerText = rejectList.length + " of " + mainContainer.children.length
     }
+}
+
+function available() {
+
 }
 
 function clickBtn(id) {
@@ -60,29 +74,38 @@ function clickBtn(id) {
     document.getElementById(id).classList.add("btn-primary")
 
     if (id === "btn-interview") {
+        currentStatus = id
+
         mainContainer.classList.add("hidden")
         filterSection.classList.remove("hidden")
         jobCount.innerText = 'Interview job'
 
-        // totalJob.innerText = interviewList.length
-        totalJob.innerText = `${interviewList.length} of ${totalCount.innerText = mainContainer.children.length}`
         renderInterview()
-        // available()
+        updateAvailableStatus()
     }
     else if (id === "btn-all") {
         mainContainer.classList.remove("hidden")
         filterSection.classList.add("hidden")
         count()
     }
-    else if (id === "btn-rejected") {
+    if (id === "btn-rejected") {
+        currentStatus = id
+
         mainContainer.classList.add("hidden")
         filterSection.classList.remove("hidden")
+        jobCount.innerText = 'Rejected job'
 
-        totalJob.innerText = `${rejectList.length} of ${totalCount.innerText = mainContainer.children.length}`
         renderReject()
+        updateAvailableStatus()
     }
     updateJobCount()
 
+}
+
+let cardContainer = document.getElementById("card-container")
+
+function styleAdd(id) {
+    console.log();
 }
 
 
@@ -122,6 +145,8 @@ mainContainer.addEventListener("click", function (id) {
 
         count()
 
+        id.target.parentNode.parentNode.classList.add("border-l-4", "border-green-400")
+
     } else if (id.target.classList.contains("btn-error")) {
         const parent = id.target.parentNode.parentNode;
 
@@ -149,7 +174,8 @@ mainContainer.addEventListener("click", function (id) {
         interviewList = interviewList.filter(item => item.jobName != jobInfo.jobName)
 
         count()
-
+        
+        id.target.parentNode.parentNode.classList.add("border-l-4", "border-red-400")
     }
 })
 
@@ -209,6 +235,7 @@ function renderReject() {
 }
 
 
+
 filterSection.addEventListener("click", function (id) {
     if (id.target.classList.contains("btn-success")) {
         const parent = id.target.parentNode.parentNode;
@@ -238,6 +265,7 @@ filterSection.addEventListener("click", function (id) {
 
         count()
         updateJobCount()
+        updateAvailableStatus()
 
         if (currentStatus === "btn-rejected") {
             renderReject()
@@ -272,6 +300,7 @@ filterSection.addEventListener("click", function (id) {
 
         count()
         updateJobCount()
+        updateAvailableStatus()
 
         if (currentStatus === "btn-interview") {
             renderInterview()
@@ -297,6 +326,4 @@ function available() {
 
     availableStatus.appendChild(availableElement)
 }
-
-console.log(availableStatus);
 
