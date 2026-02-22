@@ -59,9 +59,6 @@ function updateJobCount() {
     }
 }
 
-function available() {
-
-}
 
 function clickBtn(id) {
     currentStatus = id
@@ -104,11 +101,6 @@ function clickBtn(id) {
 
 let cardContainer = document.getElementById("card-container")
 
-function styleAdd(id) {
-    console.log();
-}
-
-
 
 mainContainer.addEventListener("click", function (id) {
 
@@ -121,7 +113,9 @@ mainContainer.addEventListener("click", function (id) {
 
         const companyName = parent.querySelector(".company-name").innerText
         const jobName = parent.querySelector(".job-name").innerText
+        const location = parent.querySelector(".location").innerText
         const salary = parent.querySelector(".salary").innerText
+        const type = parent.querySelector(".type").innerText
         const status = parent.querySelector(".apply").innerText
         const about = parent.querySelector(".about").innerText
 
@@ -130,15 +124,12 @@ mainContainer.addEventListener("click", function (id) {
         const jobInfo = {
             companyName,
             jobName,
+            location,
+            type,
             salary,
             status: "Interview",
             about
         }
-
-        let statusColor = parent.querySelector(".apply");
-
-        statusColor.classList.add("bg-green-200")
-        statusColor.classList.remove("bg-red-200")
 
 
         const exist = interviewList.find(item => item.companyName === jobInfo.companyName)
@@ -151,16 +142,15 @@ mainContainer.addEventListener("click", function (id) {
 
         count()
 
-        id.target.parentNode.parentNode.classList.remove("border-l-4", "border-red-400")
-
-        id.target.parentNode.parentNode.classList.add("border-l-4", "border-green-400")
 
     } else if (id.target.classList.contains("btn-error")) {
         const parent = id.target.parentNode.parentNode;
 
         const companyName = parent.querySelector(".company-name").innerText
         const jobName = parent.querySelector(".job-name").innerText
+        const location = parent.querySelector(".location").innerText
         const salary = parent.querySelector(".salary").innerText
+        const type = parent.querySelector(".type").innerText
         const status = parent.querySelector(".apply").innerText
         const about = parent.querySelector(".about").innerText
 
@@ -169,14 +159,12 @@ mainContainer.addEventListener("click", function (id) {
         const jobInfo = {
             companyName,
             jobName,
+            location,
+            type,
             salary,
             status: "Rejected",
             about
         }
-
-        let statusColor = parent.querySelector(".apply");
-
-        statusColor.classList.add("bg-red-200")
 
         const exist = rejectList.find(item => item.companyName === jobInfo.companyName)
         if (!exist) {
@@ -187,7 +175,6 @@ mainContainer.addEventListener("click", function (id) {
 
         count()
 
-        id.target.parentNode.parentNode.classList.add("border-l-4", "border-red-400")
     }
 })
 
@@ -198,11 +185,6 @@ function renderInterview() {
     for (const event of interviewList) {
         const div = document.createElement("div");
 
-        statusColor = "bg-green-200"
-
-        if (event.status === "Interview") statusColor = "bg-green-200"
-        else if (event.status === "Rejected") statusColor = "bg-red-200"
-
         div.innerHTML = `
         <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-green-400">
             <div class=" flex justify-between">
@@ -212,8 +194,12 @@ function renderInterview() {
                 </div>
                 <div class="btn"><i class="fa-solid fa-trash-can"></i></div>
             </div>
-            <p class="salary">${event.salary}</p>
-            <p class=" apply bg-base-300 px-2 ${statusColor} py-1 inline-block">${event.status}</p>
+            <div class=" flex gap-x-3">
+                <p class="location">${event.location}</p>
+                <p class="type">${event.type}</p>
+                <p class="salary"> ${event.salary}</p>
+            </div>
+            <p class=" apply bg-base-300 px-2  py-1 inline-block">${event.status}</p>
             <p class="about">${event.about}</p>
             <div>
                 <button id="interview-btn" class="btn btn-outline btn-success">INTERVIEW</button>
@@ -230,21 +216,22 @@ function renderReject() {
 
     for (const event of rejectList) {
         const div = document.createElement("div");
-        statusColor = "bg-green-200"
 
-        if (event.status === "Interview") statusColor = "bg-green-200"
-        else if (event.status === "Rejected") statusColor = "bg-red-200"
         div.innerHTML = `
-        <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-red-400">
+        <div class=" bg-base-200 p-3 rounded-sm space-y-4  border-l-4 border-green-400">
             <div class=" flex justify-between">
                 <div>
                     <h3 class="company-name text-2xl">${event.companyName}</h3>
                     <p class="job-name">${event.jobName}</p>
                 </div>
-                <div class="btn"><i class="delete fa-solid fa-trash-can"></i></div>
+                <div class="btn"><i class="fa-solid fa-trash-can"></i></div>
             </div>
-            <p class="salary">${event.salary}</p>
-            <p class=" apply bg-base-300 px-2 py-1 ${statusColor} inline-block">${event.status}</p>
+            <div class=" flex gap-x-3">
+                <p class="location">${event.location}</p>
+                <p class="type">${event.type}</p>
+                <p class="salary"> ${event.salary}</p>
+            </div>
+            <p class=" apply bg-base-300 px-2  py-1 inline-block">${event.status}</p>
             <p class="about">${event.about}</p>
             <div>
                 <button id="interview-btn" class="btn btn-outline btn-success">INTERVIEW</button>
@@ -269,6 +256,14 @@ filterSection.addEventListener("click", function (id) {
         const about = parent.querySelector(".about").innerText
 
         parent.querySelector(".apply").innerText = "Interview"
+        
+        const allCards = mainContainer.children;
+        for (let card of allCards) {
+            const name = card.querySelector(".job-name").innerText;
+            if (name === jobName) {
+                card.querySelector(".apply").innerText = "Interview";
+            }
+        }
 
         const jobInfo = {
             companyName,
@@ -304,6 +299,14 @@ filterSection.addEventListener("click", function (id) {
         const about = parent.querySelector(".about").innerText
 
         parent.querySelector(".apply").innerText = "Rejected"
+
+        const allCards = mainContainer.children;
+        for (let card of allCards) {
+            const name = card.querySelector(".job-name").innerText;
+            if (name === jobName) {
+                card.querySelector(".apply").innerText = "Rejected";
+            }
+        }
 
         const jobInfo = {
             companyName,
